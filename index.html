@@ -152,11 +152,18 @@ const uid=()=>'p_'+Date.now()+'_'+Math.floor(Math.random()*10000);
 function lastBusinessDay(ano,mes){let d=new Date(ano,mes+1,0);while(d.getDay()===0||d.getDay()===6){d.setDate(d.getDate()-1);}return d;}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
 async function loadData(){
-  try{purchases=JSON.parse(localStorage.getItem('cc_purchases'))||SEED_PURCHASES.slice();}catch(e){purchases=SEED_PURCHASES.slice();}
-  try{rules=JSON.parse(localStorage.getItem('cc_rules'))||SEED_RULES.slice();}catch(e){rules=SEED_RULES.slice();}
-  try{incomes=JSON.parse(localStorage.getItem('cc_incomes'))||[];}catch(e){incomes=[];}
-  try{saldoRef=JSON.parse(localStorage.getItem('cc_saldo_ref'))||null;}catch(e){saldoRef=null;}
-  rules.forEach(r=>{if(!r.id)r.id=uid();});await saveAll();
+  // Tenta pegar do LocalStorage
+  const p = localStorage.getItem('cc_purchases');
+  purchases = p ? JSON.parse(p) : SEED_PURCHASES.slice();
+  
+  // GARANTIA: Se o backup importou, os dados estão aqui. 
+  // Forçamos o recarregamento das listas na tela imediatamente:
+  if (typeof renderCartoes === 'function') renderCartoes();
+  
+  // Adicione aqui a chamada para as funções que desenham as listas na tela
+  // Exemplo: if (typeof renderRecentes === 'function') renderRecentes();
+  
+  await saveAll();
 }
 async function saveAll(){localStorage.setItem('cc_purchases',JSON.stringify(purchases));localStorage.setItem('cc_rules',JSON.stringify(rules));localStorage.setItem('cc_incomes',JSON.stringify(incomes));localStorage.setItem('cc_saldo_ref',JSON.stringify(saldoRef));}
 function ruleFor(cartao,date){const cartaoNormalizado=cartao.toUpperCase();const cands=rules.filter(r=>r.cartao.toUpperCase()===cartaoNormalizado&&parseISO(r.validoDesde)<=date);if(!cands.length)return{diaFechamento:0,diaVencimento:0};cands.sort((a,b)=>parseISO(b.validoDesde)-parseISO(a.validoDesde));return cands[0];}
