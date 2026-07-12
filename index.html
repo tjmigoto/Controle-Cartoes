@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Meu Controle de Cartões</title>
+<!-- PWA Config -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#22314A">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
+<style>
+:root{--paper:#EEF0E9;--paper-2:#E3E6DC;--ink:#22314A;--ink-soft:#4A5B75;--line:#C7CCBE;--amber:#B5773A;--amber-soft:#E8D6BC;--sage:#5C7A5E;--sage-soft:#DCE6DA;--rust:#A6503B;--rust-soft:#EFD9D2;--white:#FBFAF6;--radius:14px;--shadow: 0 2px 10px rgba(34,49,74,0.08);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;}
+.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--paper);position:relative;}
+header.top{padding:22px 20px 16px;background:var(--ink);color:var(--white);border-radius:0 0 22px 22px;}
+header.top .brand{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-soft);margin:0 0 6px;}
+header.top .headline{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:26px;font-weight:600;margin:0 0 4px;}
+header.top .header-saldo{font-size:13px;color:var(--amber-soft);margin:0 0 14px;font-weight:600;}
+.month-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px;}
+.month-card{flex:0 0 auto;background:rgba(255,255,255,0.08);border-radius:12px;padding:10px 14px;min-width:108px;}
+.month-card .lbl{font-size:11px;opacity:.72;text-transform:uppercase;letter-spacing:.06em;}
+.month-card .val{font-family:'Courier New',monospace;font-size:16px;font-weight:700;margin-top:3px;}
+main{flex:1;padding:18px 16px 90px;overflow-y:auto;}
+h2.section-title{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:19px;margin:4px 0 14px;color:var(--ink);}
+.card-panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);}
+label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;margin:12px 0 5px;}
+label:first-child{margin-top:0;}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font-size:15px;background:var(--paper);color:var(--ink);font-family:inherit;}
+input:focus,select:focus{outline:2px solid var(--amber);outline-offset:1px;}
+.row2{display:flex;gap:10px;}
+.row2 > div{flex:1;}
+button.primary{width:100%;margin-top:16px;padding:12px;background:var(--ink);color:var(--white);border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;}
+button.primary:active{opacity:.85;}
+button.ghost{width:100%;margin-top:8px;padding:10px;background:transparent;color:var(--ink-soft);border:1px solid var(--line);border-radius:10px;font-size:13px;cursor:pointer;}
+.entry{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);}
+.entry:last-child{border-bottom:none;}
+.entry .meta{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+.entry .name{font-weight:600;font-size:14.5px;}
+.entry .value{font-family:'Courier New',monospace;font-weight:700;font-size:14.5px;white-space:nowrap;margin-left:10px;}
+.tag{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:20px;margin-right:5px;font-weight:600;}
+.tag.visa{background:var(--sage-soft);color:var(--sage);}.tag.elo{background:var(--amber-soft);color:var(--amber);}.tag.avista{background:var(--rust-soft);color:var(--rust);}.tag.outro{background:var(--paper-2);color:var(--ink-soft);}
+.del-btn{background:none;border:none;color:var(--rust);font-size:12px;cursor:pointer;padding:4px 0 0;}
+.empty{text-align:center;color:var(--ink-soft);font-size:13.5px;padding:30px 10px;}
+.month-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.month-box{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px;}
+.month-box .m{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:700;}
+.month-box .v{font-family:'Courier New',monospace;font-size:17px;font-weight:700;margin-top:4px;}
+.month-box.current{border-color:var(--amber);background:var(--amber-soft);}
+nav.bottom{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:var(--white);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));}
+nav.bottom button{flex:1;background:none;border:none;padding:8px 2px;font-size:10.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:3px;}
+nav.bottom button .ic{font-size:18px;}
+nav.bottom button.active{color:var(--ink);background:var(--paper-2);}
+.filters{display:flex;gap:8px;margin-bottom:14px;}.filters select,.filters input{flex:1;}
+.total-line{display:flex;justify-content:space-between;align-items:baseline;padding-top:10px;margin-top:10px;border-top:1px dashed var(--line);}
+.total-line .lbl{font-size:13px;color:var(--ink-soft);}.total-line .amt{font-family:'Courier New',monospace;font-size:19px;font-weight:800;}
+.rule-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.rule-row:last-child{border-bottom:none;}.rule-row .cd{font-family:'Courier New',monospace;color:var(--ink-soft);}.rule-row .del-btn{margin-left:0;flex:0 0 auto;}
+.dia-row{display:flex;justify-content:space-between;align-items:center;padding:7px 4px;border-bottom:1px solid var(--line);font-size:12.5px;}.dia-row:last-child{border-bottom:none;}.dia-row .v{font-family:'Courier New',monospace;font-weight:700;}.dia-row .dw{color:var(--ink-soft);font-size:11px;text-transform:capitalize;flex:0 0 90px;text-align:right;}.dia-row.sab{background:var(--amber-soft);margin:0 -10px;padding:7px 14px;}.dia-row.dom{background:var(--rust-soft);margin:0 -10px;padding:7px 14px;}.dia-row.hoje{outline:2px solid var(--ink);border-radius:6px;}.dia-row{cursor:pointer;}
+.dia-detail{padding:6px 10px 10px 20px;border-bottom:1px solid var(--line);background:var(--paper-2);margin:0 -10px;}.dia-detail.hidden{display:none;}
+.dia-detail-item{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--ink-soft);}.dia-detail-item.empty-detail{font-style:italic;justify-content:flex-start;}
+.hidden{display:none !important;}
+.toast{position:fixed;bottom:78px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--white);padding:9px 18px;border-radius:30px;font-size:13px;box-shadow:var(--shadow);opacity:0;transition:opacity .25s;pointer-events:none;z-index:50;white-space:nowrap;}.toast.show{opacity:1;}
+.load-veil{position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;color:var(--ink-soft);z-index:100;}
+.backup-banner{max-width:480px;margin:12px auto 0;background:var(--rust-soft);border:1px solid var(--rust);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--ink);}.backup-banner .txt{display:block;margin-bottom:10px;line-height:1.4;}.backup-banner-actions{display:flex;gap:8px;}.backup-banner-actions button{flex:1;padding:8px;border-radius:8px;border:none;font-size:12.5px;font-weight:700;cursor:pointer;}.backup-banner-actions button#bannerExportar{background:var(--rust);color:var(--white);}.backup-banner-actions button#bannerDepois{background:transparent;color:var(--ink-soft);border:1px solid var(--line);}
+</style>
+</head>
+<body>
+<div class="load-veil" id="veil">Carregando…</div>
+<div class="app">
+  <header class="top">
+    <p class="brand">Controle de Cartões</p>
+    <h1 class="headline" id="headerTotal">R$ 0,00</h1>
+    <p class="header-saldo" id="headerSaldo"></p>
+    <div class="month-strip" id="monthStrip"></div>
+  </header>
+  <div class="backup-banner hidden" id="backupBanner"><span class="txt"></span><div class="backup-banner-actions"><button id="bannerExportar">Exportar agora</button><button id="bannerDepois">Agora não</button></div></div>
+  <main id="views">
+    <section id="view-lancar">
+      <h2 class="section-title">Lançar compra</h2>
+      <div class="card-panel">
+        <label for="f-loja">Loja / comércio</label><input id="f-loja" list="lojas-list" placeholder="Ex: Farmácia Nissei" autocomplete="off"><datalist id="lojas-list"></datalist>
+        <div class="row2"><div><label for="f-data">Data da compra</label><input id="f-data" type="date"></div><div><label for="f-cartao">Cartão</label><select id="f-cartao"></select></div></div>
+        <div class="row2"><div><label for="f-valor">Valor total (R$)</label><input id="f-valor" type="number" step="0.01" min="0" placeholder="0,00"></div><div><label for="f-parcelas">Nº de parcelas</label><input id="f-parcelas" type="number" min="1" value="1"></div></div>
+        <button class="primary" id="btnSalvarCompra">Salvar lançamento</button><p class="small-note" id="previewParcela"></p>
+      </div>
+      <h2 class="section-title">Últimos lançamentos</h2>
+      <div class="card-panel" id="listaRecentes"></div>
+    </section>
+    <section id="view-parcelas" class="hidden">
+      <h2 class="section-title">Parcelas</h2>
+      <div class="filters"><select id="p-ano"></select><select id="p-mes"></select></div>
+      <input id="p-busca" placeholder="Buscar por loja…" style="margin-bottom:14px;">
+      <div class="card-panel"><div class="total-line"><span class="lbl">Total no filtro</span><span class="amt" id="p-total">R$ 0,00</span></div></div>
+      <div class="card-panel" id="listaParcelas"></div>
+    </section>
+    <section id="view-resumo" class="hidden">
+      <h2 class="section-title">Resumo mensal</h2>
+      <div class="filters"><select id="r-ano"></select></div>
+      <div class="month-grid" id="resumoGrid"></div>
+      <h2 class="section-title">Consulta diária</h2>
+      <div class="filters"><select id="d-mes"></select></div>
+      <div class="card-panel" id="diarioList" style="padding:6px 10px;"></div>
+    </section>
+    <section id="view-saldo" class="hidden">
+      <h2 class="section-title">Saldo em conta</h2>
+      <div class="card-panel"><div class="total-line" style="border-top:none;padding-top:0;margin-top:0;"><span class="lbl">Saldo atual (hoje)</span><span class="amt" id="saldoAtualVal">R$ 0,00</span></div><p class="small-note" id="saldoRefInfo"></p></div>
+      <h2 class="section-title">Saldo de referência</h2>
+      <div class="card-panel"><p class="small-note" style="margin-top:0;">Informe o saldo real da sua conta em uma data conhecida.</p><label for="s-ref-valor">Saldo nessa data (R$)</label><input id="s-ref-valor" type="number" step="0.01"><label for="s-ref-data">Data desse saldo</label><input id="s-ref-data" type="date"><button class="primary" id="btnSalvarRef">Salvar saldo de referência</button></div>
+      <h2 class="section-title">Entradas mensais</h2>
+      <div class="card-panel"><label for="e-desc">Descrição</label><input id="e-desc" placeholder="Ex: Salário, Aluguel…"><div class="row2"><div><label for="e-mes">Mês</label><select id="e-mes"></select></div><div><label for="e-ano">Ano</label><input id="e-ano" type="number"></div></div><label for="e-valor">Valor da entrada (R$)</label><input id="e-valor" type="number" step="0.01"><label for="e-data">Data do crédito</label><input id="e-data" type="date"><button class="primary" id="btnSalvarEntrada">Salvar entrada</button></div>
+      <div class="card-panel" id="listaEntradas"></div>
+      <h2 class="section-title">Evolução mensal</h2>
+      <div class="filters"><select id="s-ano"></select></div>
+      <div class="month-grid" id="saldoGrid"></div>
+    </section>
+    <section id="view-loja" class="hidden">
+      <h2 class="section-title">Consulta por loja</h2>
+      <div class="card-panel"><label for="l-ano">Ano</label><select id="l-ano"></select><label for="l-mes">Mês</label><select id="l-mes"></select><label for="l-loja">Loja</label><select id="l-loja"></select>
+        <div class="total-line"><span class="lbl">Gasto no mês</span><span class="amt" id="l-mesval">R$ 0,00</span></div><div class="total-line"><span class="lbl">Acumulado no ano</span><span class="amt" id="l-anoval">R$ 0,00</span></div></div>
+    </section>
+    <section id="view-cartoes" class="hidden">
+      <h2 class="section-title">Cartões e regras</h2>
+      <div class="card-panel" id="listaCartoes"></div>
+      <h2 class="section-title">Nova regra / cartão</h2>
+      <div class="card-panel"><label for="c-nome">Cartão</label><input id="c-nome" list="cartoes-list" placeholder="Ex: Visa, Elo…"><datalist id="cartoes-list"></datalist>
+        <div class="row2"><div><label for="c-fech">Dia fechamento</label><input id="c-fech" type="number" min="0" max="31"></div><div><label for="c-venc">Dia vencimento</label><input id="c-venc" type="number" min="0" max="31"></div></div>
+        <label for="c-desde">Válido a partir de</label><input id="c-desde" type="date"><button class="primary" id="btnSalvarRegra">Salvar regra</button></div>
+      <h2 class="section-title">Backup</h2>
+      <div class="card-panel"><button class="primary" id="btnExportar">Exportar backup (.json)</button><p class="small-note" id="lastExportInfo"></p></div>
+    </section>
+  </main>
+  <nav class="bottom"><button data-view="lancar" class="active"><span class="ic">＋</span>Lançar</button><button data-view="parcelas"><span class="ic">☰</span>Parcelas</button><button data-view="resumo"><span class="ic">▦</span>Resumo</button><button data-view="saldo"><span class="ic">$</span>Saldo</button><button data-view="loja"><span class="ic">⌕</span>Por loja</button><button data-view="cartoes"><span class="ic">▤</span>Cartões</button></nav>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const SEED_PURCHASES = [{"loja": "Exemplo de Loja", "data": "2026-07-07", "cartao": "Visa", "valorTotal": 0.0, "parcelas": 1, "id": "seed_0"}];
+const SEED_RULES = [{"cartao": "A Vista", "diaFechamento": 0, "diaVencimento": 0, "validoDesde": "2000-01-01"}, {"cartao": "Elo", "diaFechamento": 24, "diaVencimento": 5, "validoDesde": "2026-06-24"}, {"cartao": "Visa", "diaFechamento": 22, "diaVencimento": 1, "validoDesde": "2026-07-22"}];
+let purchases=[], rules=[], incomes=[], saldoRef=null;
+const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const DIAS_SEMANA=["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
+const fmtBRL=v=>(isFinite(v)?v:0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const parseISO=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
+const toISO=d=>{const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());};
+const fmtBR=d=>d.toLocaleDateString('pt-BR');
+const uid=()=>'p_'+Date.now()+'_'+Math.floor(Math.random()*10000);
+function lastBusinessDay(ano,mes){let d=new Date(ano,mes+1,0);while(d.getDay()===0||d.getDay()===6){d.setDate(d.getDate()-1);}return d;}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+async function loadData(){
+  try{purchases=JSON.parse(localStorage.getItem('cc_purchases'))||SEED_PURCHASES.slice();}catch(e){purchases=SEED_PURCHASES.slice();}
+  try{rules=JSON.parse(localStorage.getItem('cc_rules'))||SEED_RULES.slice();}catch(e){rules=SEED_RULES.slice();}
+  try{incomes=JSON.parse(localStorage.getItem('cc_incomes'))||[];}catch(e){incomes=[];}
+  try{saldoRef=JSON.parse(localStorage.getItem('cc_saldo_ref'))||null;}catch(e){saldoRef=null;}
+  rules.forEach(r=>{if(!r.id)r.id=uid();});await saveAll();
+}
+async function saveAll(){localStorage.setItem('cc_purchases',JSON.stringify(purchases));localStorage.setItem('cc_rules',JSON.stringify(rules));localStorage.setItem('cc_incomes',JSON.stringify(incomes));localStorage.setItem('cc_saldo_ref',JSON.stringify(saldoRef));}
+function ruleFor(cartao,date){const cartaoNormalizado=cartao.toUpperCase();const cands=rules.filter(r=>r.cartao.toUpperCase()===cartaoNormalizado&&parseISO(r.validoDesde)<=date);if(!cands.length)return{diaFechamento:0,diaVencimento:0};cands.sort((a,b)=>parseISO(b.validoDesde)-parseISO(a.validoDesde));return cands[0];}
+function firstDueDate(purchase){
+  const d=parseISO(purchase.data);
+  if(purchase.cartao==='A Vista')return d;
+  const rule=ruleFor(purchase.cartao,d);
+  return new Date(d.getFullYear(),d.getMonth()+(d.getDate()<=rule.diaFechamento?1:2),rule.diaVencimento);
+}
+function installmentsFor(purchase){
+  const start=firstDueDate(purchase);
+  const n=Math.max(1,purchase.parcelas||1);
+  const value=purchase.valorTotal/n;
+  const list=[];
+  for(let i=0;i<n;i++)list.push({purchaseId:purchase.id,loja:purchase.loja,cartao:purchase.cartao,num:i+1,total:n,date:new Date(start.getFullYear(),start.getMonth()+i,start.getDate()),value});
+  return list;
+}
+function allInstallments(){let out=[];for(const p of purchases)out=out.concat(installmentsFor(p));return out.sort((a,b)=>a.date-b.date);}
+function tagClass(cartao){const c=(cartao||'').toLowerCase();if(c==='visa')return 'visa';if(c==='elo')return 'elo';if(c==='a vista'||c==='à vista')return 'avista';return 'outro';}
+function uniqueCartoes(){return [...new Set(rules.map(r=>r.cartao.toUpperCase()))].sort();}
+function renderCartoes(){
+  const box=document.getElementById('listaCartoes');
+  const cartoes=uniqueCartoes();
+  if(!cartoes.length){box.innerHTML='<p class="empty">Nenhum cartão cadastrado.</p>';return;}
+  box.innerHTML=cartoes.map(c=>{
+    const hist=rules.filter(r=>r.cartao.toUpperCase()===c).sort((a,b)=>parseISO(b.validoDesde)-parseISO(a.validoDesde));
+    return `<div style="margin-bottom:14px;"><div class="name" style="margin-bottom:4px;"><span class="tag ${tagClass(c)}">${c}</span></div>
+    ${hist.map(r=>`<div class="rule-row"><span>desde ${fmtBR(parseISO(r.validoDesde))}</span><span class="cd">F:${r.diaFechamento} V:${r.diaVencimento}</span><button class="del-btn" data-delrule="${r.id}" style="margin-left:8px;">excluir</button></div>`).join('')}
+    </div>`;
+  }).join('');
+  box.querySelectorAll('[data-delrule]').forEach(b=>{
+    b.addEventListener('click',async()=>{if(confirm('Excluir essa regra?')){rules=rules.filter(r=>r.id!==b.dataset.delrule);await saveAll();renderCartoes();populateCartaoSelect();renderHeader();}});
+  });
+}
+function populateCartaoSelect(){const sel=document.getElementById('f-cartao');sel.innerHTML=uniqueCartoes().map(c=>`<option value="${c}">${c}</option>`).join('');const dl=document.getElementById('cartoes-list');dl.innerHTML=uniqueCartoes().map(c=>`<option value="${c}"></option>`).join('');}
+document.getElementById('btnSalvarRegra').addEventListener('click',async()=>{
+  const c=document.getElementById('c-nome').value.trim(),f=parseInt(document.getElementById('c-fech').value),v=parseInt(document.getElementById('c-venc').value),d=document.getElementById('c-desde').value;
+  if(!c||isNaN(f)||!d){alert('Preencha os campos');return;}
+  rules.push({id:uid(),cartao:c,diaFechamento:f,diaVencimento:v,validoDesde:d});await saveAll();renderCartoes();populateCartaoSelect();
+});
+document.querySelectorAll('nav.bottom button').forEach(btn=>{btn.addEventListener('click',()=>{
+  document.querySelectorAll('nav.bottom button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById('view-'+btn.dataset.view).classList.remove('hidden');
+});});
+async function init(){await loadData();renderCartoes();document.getElementById('veil').style.display='none';}
+init();
+// PWA: registro do service worker
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+</script>
+</body>
+</html>
