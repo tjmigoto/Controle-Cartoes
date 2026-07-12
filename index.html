@@ -223,20 +223,22 @@ document.getElementById('inputImportar').addEventListener('change', (e) => {
   if (!file) return;
   const reader = new FileReader();
   reader.onload = async (event) => {
-  try {
-    const data = JSON.parse(event.target.result);
-    // Se o seu backup antigo salvava os dados de forma diferente, 
-    // tentamos encontrar as chaves corretas aqui
-    purchases = data.purchases || data.compras || [];
-    rules = data.rules || data.regras || [];
-    incomes = data.incomes || data.entradas || [];
-    saldoRef = data.saldoRef || data.referencia || null;
-    
-    await saveAll();
-    alert('Backup importado com sucesso! Recarregando...');
-    window.location.reload();
-  } catch (err) { alert('Erro ao importar: ' + err.message); }
-};
+    try {
+      const data = JSON.parse(event.target.result);
+      
+      // Carrega os dados conforme a estrutura do seu arquivo
+      purchases = data.purchases || [];
+      
+      // Se o backup não tiver as outras chaves, inicializamos vazias para não quebrar
+      rules = data.rules || rules || []; 
+      incomes = data.incomes || [];
+      saldoRef = data.saldoRef || null;
+      
+      await saveAll();
+      alert('Backup importado com sucesso! Se os dados não aparecerem, atualize a página.');
+      window.location.reload();
+    } catch (err) { alert('Erro ao importar: ' + err.message); }
+  };
   reader.readAsText(file);
 });
 </script>
