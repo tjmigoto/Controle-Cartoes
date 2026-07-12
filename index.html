@@ -128,7 +128,11 @@ nav.bottom button.active{color:var(--ink);background:var(--paper-2);}
         <div class="row2"><div><label for="c-fech">Dia fechamento</label><input id="c-fech" type="number" min="0" max="31"></div><div><label for="c-venc">Dia vencimento</label><input id="c-venc" type="number" min="0" max="31"></div></div>
         <label for="c-desde">Válido a partir de</label><input id="c-desde" type="date"><button class="primary" id="btnSalvarRegra">Salvar regra</button></div>
       <h2 class="section-title">Backup</h2>
-      <div class="card-panel"><button class="primary" id="btnExportar">Exportar backup (.json)</button><p class="small-note" id="lastExportInfo"></p></div>
+      <div class="card-panel">
+        <button class="primary" id="btnExportar">Exportar backup (.json)</button>
+        <button class="ghost" id="btnImportarTrigger" style="margin-top: 10px;">Importar backup (.json)</button>
+        <input type="file" id="inputImportar" accept=".json" class="hidden">
+      </div> (.json)</button><p class="small-note" id="lastExportInfo"></p></div>
     </section>
   </main>
   <nav class="bottom"><button data-view="lancar" class="active"><span class="ic">＋</span>Lançar</button><button data-view="parcelas"><span class="ic">☰</span>Parcelas</button><button data-view="resumo"><span class="ic">▦</span>Resumo</button><button data-view="saldo"><span class="ic">$</span>Saldo</button><button data-view="loja"><span class="ic">⌕</span>Por loja</button><button data-view="cartoes"><span class="ic">▤</span>Cartões</button></nav>
@@ -201,6 +205,37 @@ async function init(){await loadData();renderCartoes();document.getElementById('
 init();
 // PWA: registro do service worker
 if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+// FUNÇÕES DE BACKUP ADICIONADAS
+document.getElementById('btnExportar').addEventListener('click', () => {
+  const data = JSON.stringify({ purchases, rules, incomes, saldoRef });
+  const blob = new Blob([data], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'backup_cartoes.json'; a.click();
+});
+
+document.getElementById('btnImportarTrigger').addEventListener('click', () => {
+  document.getElementById('inputImportar').click();
+});
+
+document.getElementById('inputImportar').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (event) => {
+    try {
+      const data = JSON.parse(event.target.result);
+      purchases = data.purchases || [];
+      rules = data.rules || [];
+      incomes = data.incomes || [];
+      saldoRef = data.saldoRef || null;
+      await saveAll();
+      alert('Backup importado com sucesso!');
+      window.location.reload();
+    } catch (err) { alert('Erro ao importar: ' + err.message); }
+  };
+  reader.readAsText(file);
+});
 </script>
 </body>
 </html>
