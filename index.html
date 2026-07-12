@@ -4,70 +4,305 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Meu Controle de Cartões</title>
-<!-- PWA Config -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#22314A">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-
 <style>
-:root{--paper:#EEF0E9;--paper-2:#E3E6DC;--ink:#22314A;--ink-soft:#4A5B75;--line:#C7CCBE;--amber:#B5773A;--amber-soft:#E8D6BC;--sage:#5C7A5E;--sage-soft:#DCE6DA;--rust:#A6503B;--rust-soft:#EFD9D2;--white:#FBFAF6;--radius:14px;--shadow: 0 2px 10px rgba(34,49,74,0.08);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+:root{
+  --paper:#EEF0E9;
+  --paper-2:#E3E6DC;
+  --ink:#22314A;
+  --ink-soft:#4A5B75;
+  --line:#C7CCBE;
+  --amber:#B5773A;
+  --amber-soft:#E8D6BC;
+  --sage:#5C7A5E;
+  --sage-soft:#DCE6DA;
+  --rust:#A6503B;
+  --rust-soft:#EFD9D2;
+  --white:#FBFAF6;
+  --radius:14px;
+  --shadow: 0 2px 10px rgba(34,49,74,0.08);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
 *{box-sizing:border-box;}
-body{margin:0;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;}
-.app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;background:var(--paper);position:relative;}
-header.top{padding:22px 20px 16px;background:var(--ink);color:var(--white);border-radius:0 0 22px 22px;}
-header.top .brand{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-soft);margin:0 0 6px;}
-header.top .headline{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:26px;font-weight:600;margin:0 0 4px;}
-header.top .header-saldo{font-size:13px;color:var(--amber-soft);margin:0 0 14px;font-weight:600;}
-.month-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px;}
-.month-card{flex:0 0 auto;background:rgba(255,255,255,0.08);border-radius:12px;padding:10px 14px;min-width:108px;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+.app{
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--paper);
+  position:relative;
+}
+header.top{
+  padding:22px 20px 16px;
+  background:var(--ink);
+  color:var(--white);
+  border-radius:0 0 22px 22px;
+}
+header.top .brand{
+  font-family:Georgia,'Iowan Old Style','Times New Roman',serif;
+  font-size:13px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--amber-soft);
+  margin:0 0 6px;
+}
+header.top .headline{
+  font-family:Georgia,'Iowan Old Style','Times New Roman',serif;
+  font-size:26px;
+  font-weight:600;
+  margin:0 0 4px;
+}
+header.top .header-saldo{
+  font-size:13px;
+  color:var(--amber-soft);
+  margin:0 0 14px;
+  font-weight:600;
+}
+.month-strip{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:2px;
+}
+.month-card{
+  flex:0 0 auto;
+  background:rgba(255,255,255,0.08);
+  border-radius:12px;
+  padding:10px 14px;
+  min-width:108px;
+}
 .month-card .lbl{font-size:11px;opacity:.72;text-transform:uppercase;letter-spacing:.06em;}
 .month-card .val{font-family:'Courier New',monospace;font-size:16px;font-weight:700;margin-top:3px;}
-main{flex:1;padding:18px 16px 90px;overflow-y:auto;}
-h2.section-title{font-family:Georgia,'Iowan Old Style','Times New Roman',serif;font-size:19px;margin:4px 0 14px;color:var(--ink);}
-.card-panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:var(--shadow);}
-label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;margin:12px 0 5px;}
+main{
+  flex:1;
+  padding:18px 16px 90px;
+  overflow-y:auto;
+}
+h2.section-title{
+  font-family:Georgia,'Iowan Old Style','Times New Roman',serif;
+  font-size:19px;
+  margin:4px 0 14px;
+  color:var(--ink);
+}
+.card-panel{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+}
+label{
+  display:block;
+  font-size:12px;
+  font-weight:600;
+  color:var(--ink-soft);
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin:12px 0 5px;
+}
 label:first-child{margin-top:0;}
-input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font-size:15px;background:var(--paper);color:var(--ink);font-family:inherit;}
+input,select{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  font-size:15px;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:inherit;
+}
 input:focus,select:focus{outline:2px solid var(--amber);outline-offset:1px;}
 .row2{display:flex;gap:10px;}
 .row2 > div{flex:1;}
-button.primary{width:100%;margin-top:16px;padding:12px;background:var(--ink);color:var(--white);border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;}
+button.primary{
+  width:100%;
+  margin-top:16px;
+  padding:12px;
+  background:var(--ink);
+  color:var(--white);
+  border:none;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
 button.primary:active{opacity:.85;}
-button.ghost{width:100%;margin-top:8px;padding:10px;background:transparent;color:var(--ink-soft);border:1px solid var(--line);border-radius:10px;font-size:13px;cursor:pointer;}
-.entry{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);}
+button.ghost{
+  width:100%;
+  margin-top:8px;
+  padding:10px;
+  background:transparent;
+  color:var(--ink-soft);
+  border:1px solid var(--line);
+  border-radius:10px;
+  font-size:13px;
+  cursor:pointer;
+}
+.entry{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:11px 0;
+  border-bottom:1px solid var(--line);
+}
 .entry:last-child{border-bottom:none;}
 .entry .meta{font-size:12px;color:var(--ink-soft);margin-top:2px;}
 .entry .name{font-weight:600;font-size:14.5px;}
 .entry .value{font-family:'Courier New',monospace;font-weight:700;font-size:14.5px;white-space:nowrap;margin-left:10px;}
-.tag{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:20px;margin-right:5px;font-weight:600;}
-.tag.visa{background:var(--sage-soft);color:var(--sage);}.tag.elo{background:var(--amber-soft);color:var(--amber);}.tag.avista{background:var(--rust-soft);color:var(--rust);}.tag.outro{background:var(--paper-2);color:var(--ink-soft);}
-.del-btn{background:none;border:none;color:var(--rust);font-size:12px;cursor:pointer;padding:4px 0 0;}
-.empty{text-align:center;color:var(--ink-soft);font-size:13.5px;padding:30px 10px;}
+.tag{
+  display:inline-block;
+  font-size:10.5px;
+  padding:2px 7px;
+  border-radius:20px;
+  margin-right:5px;
+  font-weight:600;
+}
+.tag.visa{background:var(--sage-soft);color:var(--sage);}
+.tag.elo{background:var(--amber-soft);color:var(--amber);}
+.tag.avista{background:var(--rust-soft);color:var(--rust);}
+.tag.outro{background:var(--paper-2);color:var(--ink-soft);}
+.del-btn{
+  background:none;border:none;color:var(--rust);font-size:12px;cursor:pointer;padding:4px 0 0;
+}
+.empty{
+  text-align:center;
+  color:var(--ink-soft);
+  font-size:13.5px;
+  padding:30px 10px;
+}
 .month-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.month-box{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px;}
+.month-box{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:11px;
+  padding:12px;
+}
 .month-box .m{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:700;}
 .month-box .v{font-family:'Courier New',monospace;font-size:17px;font-weight:700;margin-top:4px;}
 .month-box.current{border-color:var(--amber);background:var(--amber-soft);}
-nav.bottom{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:var(--white);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));}
-nav.bottom button{flex:1;background:none;border:none;padding:8px 2px;font-size:10.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:3px;}
+nav.bottom{
+  position:fixed;
+  bottom:0;left:0;right:0;
+  max-width:480px;
+  margin:0 auto;
+  background:var(--white);
+  border-top:1px solid var(--line);
+  display:flex;
+  padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+}
+nav.bottom button{
+  flex:1;
+  background:none;
+  border:none;
+  padding:8px 2px;
+  font-size:10.5px;
+  font-weight:600;
+  color:var(--ink-soft);
+  cursor:pointer;
+  border-radius:10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+}
 nav.bottom button .ic{font-size:18px;}
 nav.bottom button.active{color:var(--ink);background:var(--paper-2);}
-.filters{display:flex;gap:8px;margin-bottom:14px;}.filters select,.filters input{flex:1;}
-.total-line{display:flex;justify-content:space-between;align-items:baseline;padding-top:10px;margin-top:10px;border-top:1px dashed var(--line);}
-.total-line .lbl{font-size:13px;color:var(--ink-soft);}.total-line .amt{font-family:'Courier New',monospace;font-size:19px;font-weight:800;}
-.rule-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;}
-.rule-row:last-child{border-bottom:none;}.rule-row .cd{font-family:'Courier New',monospace;color:var(--ink-soft);}.rule-row .del-btn{margin-left:0;flex:0 0 auto;}
-.dia-row{display:flex;justify-content:space-between;align-items:center;padding:7px 4px;border-bottom:1px solid var(--line);font-size:12.5px;}.dia-row:last-child{border-bottom:none;}.dia-row .v{font-family:'Courier New',monospace;font-weight:700;}.dia-row .dw{color:var(--ink-soft);font-size:11px;text-transform:capitalize;flex:0 0 90px;text-align:right;}.dia-row.sab{background:var(--amber-soft);margin:0 -10px;padding:7px 14px;}.dia-row.dom{background:var(--rust-soft);margin:0 -10px;padding:7px 14px;}.dia-row.hoje{outline:2px solid var(--ink);border-radius:6px;}.dia-row{cursor:pointer;}
-.dia-detail{padding:6px 10px 10px 20px;border-bottom:1px solid var(--line);background:var(--paper-2);margin:0 -10px;}.dia-detail.hidden{display:none;}
-.dia-detail-item{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--ink-soft);}.dia-detail-item.empty-detail{font-style:italic;justify-content:flex-start;}
+.filters{display:flex;gap:8px;margin-bottom:14px;}
+.filters select,.filters input{flex:1;}
+.small-note{font-size:12px;color:var(--ink-soft);margin-top:4px;line-height:1.5;}
+.total-line{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding-top:10px;margin-top:10px;border-top:1px dashed var(--line);
+}
+.total-line .lbl{font-size:13px;color:var(--ink-soft);}
+.total-line .amt{font-family:'Courier New',monospace;font-size:19px;font-weight:800;}
+.rule-row{
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 10px;
+  padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;
+}
+.rule-row:last-child{border-bottom:none;}
+.rule-row .cd{font-family:'Courier New',monospace;color:var(--ink-soft);}
+.rule-row .del-btn{margin-left:0;flex:0 0 auto;}
+.dia-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:7px 4px;border-bottom:1px solid var(--line);font-size:12.5px;
+}
+.dia-row:last-child{border-bottom:none;}
+.dia-row .v{font-family:'Courier New',monospace;font-weight:700;}
+.dia-row .dw{color:var(--ink-soft);font-size:11px;text-transform:capitalize;flex:0 0 90px;text-align:right;}
+.dia-row.sab{background:var(--amber-soft);margin:0 -10px;padding:7px 14px;}
+.dia-row.dom{background:var(--rust-soft);margin:0 -10px;padding:7px 14px;}
+.dia-row.hoje{outline:2px solid var(--ink);border-radius:6px;}
+.dia-row{cursor:pointer;}
+.dia-detail{
+  padding:6px 10px 10px 20px;
+  border-bottom:1px solid var(--line);
+  background:var(--paper-2);
+  margin:0 -10px;
+}
+.dia-detail.hidden{display:none;}
+.dia-detail-item{
+  display:flex;justify-content:space-between;font-size:12px;padding:3px 0;color:var(--ink-soft);
+}
+.dia-detail-item.empty-detail{font-style:italic;justify-content:flex-start;}
 .hidden{display:none !important;}
-.toast{position:fixed;bottom:78px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--white);padding:9px 18px;border-radius:30px;font-size:13px;box-shadow:var(--shadow);opacity:0;transition:opacity .25s;pointer-events:none;z-index:50;white-space:nowrap;}.toast.show{opacity:1;}
-.load-veil{position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;color:var(--ink-soft);z-index:100;}
-.backup-banner{max-width:480px;margin:12px auto 0;background:var(--rust-soft);border:1px solid var(--rust);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--ink);}.backup-banner .txt{display:block;margin-bottom:10px;line-height:1.4;}.backup-banner-actions{display:flex;gap:8px;}.backup-banner-actions button{flex:1;padding:8px;border-radius:8px;border:none;font-size:12.5px;font-weight:700;cursor:pointer;}.backup-banner-actions button#bannerExportar{background:var(--rust);color:var(--white);}.backup-banner-actions button#bannerDepois{background:transparent;color:var(--ink-soft);border:1px solid var(--line);}
+.toast{
+  position:fixed;
+  bottom:78px;left:50%;
+  transform:translateX(-50%);
+  background:var(--ink);
+  color:var(--white);
+  padding:9px 18px;
+  border-radius:30px;
+  font-size:13px;
+  box-shadow:var(--shadow);
+  opacity:0;
+  transition:opacity .25s;
+  pointer-events:none;
+  z-index:50;
+  white-space:nowrap;
+}
+.toast.show{opacity:1;}
+.load-veil{
+  position:fixed;inset:0;background:var(--paper);
+  display:flex;align-items:center;justify-content:center;
+  font-family:Georgia,serif;color:var(--ink-soft);
+  z-index:100;
+}
+.backup-banner{
+  max-width:480px;
+  margin:12px auto 0;
+  background:var(--rust-soft);
+  border:1px solid var(--rust);
+  border-radius:12px;
+  padding:12px 14px;
+  font-size:13px;
+  color:var(--ink);
+}
+.backup-banner .txt{display:block;margin-bottom:10px;line-height:1.4;}
+.backup-banner-actions{display:flex;gap:8px;}
+.backup-banner-actions button{
+  flex:1;
+  padding:8px;
+  border-radius:8px;
+  border:none;
+  font-size:12.5px;
+  font-weight:700;
+  cursor:pointer;
+}
+.backup-banner-actions button#bannerExportar{background:var(--rust);color:var(--white);}
+.backup-banner-actions button#bannerDepois{background:transparent;color:var(--ink-soft);border:1px solid var(--line);}
 </style>
 </head>
 <body>
-<div class="load-veil" id="veil">Carregando…</div>
+<div class="load-veil" id="veil">Carregando seu controle de cartões…</div>
 <div class="app">
   <header class="top">
     <p class="brand">Controle de Cartões</p>
@@ -75,179 +310,862 @@ nav.bottom button.active{color:var(--ink);background:var(--paper-2);}
     <p class="header-saldo" id="headerSaldo"></p>
     <div class="month-strip" id="monthStrip"></div>
   </header>
-  <div class="backup-banner hidden" id="backupBanner"><span class="txt"></span><div class="backup-banner-actions"><button id="bannerExportar">Exportar agora</button><button id="bannerDepois">Agora não</button></div></div>
+
+  <div class="backup-banner hidden" id="backupBanner">
+    <span class="txt"></span>
+    <div class="backup-banner-actions">
+      <button id="bannerExportar">Exportar agora</button>
+      <button id="bannerDepois">Agora não</button>
+    </div>
+  </div>
+
   <main id="views">
+
     <section id="view-lancar">
       <h2 class="section-title">Lançar compra</h2>
       <div class="card-panel">
-        <label for="f-loja">Loja / comércio</label><input id="f-loja" list="lojas-list" placeholder="Ex: Farmácia Nissei" autocomplete="off"><datalist id="lojas-list"></datalist>
-        <div class="row2"><div><label for="f-data">Data da compra</label><input id="f-data" type="date"></div><div><label for="f-cartao">Cartão</label><select id="f-cartao"></select></div></div>
-        <div class="row2"><div><label for="f-valor">Valor total (R$)</label><input id="f-valor" type="number" step="0.01" min="0" placeholder="0,00"></div><div><label for="f-parcelas">Nº de parcelas</label><input id="f-parcelas" type="number" min="1" value="1"></div></div>
-        <button class="primary" id="btnSalvarCompra">Salvar lançamento</button><p class="small-note" id="previewParcela"></p>
+        <label for="f-loja">Loja / comércio</label>
+        <input id="f-loja" list="lojas-list" placeholder="Ex: Farmácia Nissei" autocomplete="off">
+        <datalist id="lojas-list"></datalist>
+
+        <div class="row2">
+          <div>
+            <label for="f-data">Data da compra</label>
+            <input id="f-data" type="date">
+          </div>
+          <div>
+            <label for="f-cartao">Cartão</label>
+            <select id="f-cartao"></select>
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label for="f-valor">Valor total (R$)</label>
+            <input id="f-valor" type="number" step="0.01" min="0" placeholder="0,00">
+          </div>
+          <div>
+            <label for="f-parcelas">Nº de parcelas</label>
+            <input id="f-parcelas" type="number" min="1" value="1">
+          </div>
+        </div>
+        <button class="primary" id="btnSalvarCompra">Salvar lançamento</button>
+        <p class="small-note" id="previewParcela"></p>
       </div>
+
       <h2 class="section-title">Últimos lançamentos</h2>
       <div class="card-panel" id="listaRecentes"></div>
     </section>
+
     <section id="view-parcelas" class="hidden">
       <h2 class="section-title">Parcelas</h2>
-      <div class="filters"><select id="p-ano"></select><select id="p-mes"></select></div>
+      <div class="filters">
+        <select id="p-ano"></select>
+        <select id="p-mes"></select>
+      </div>
       <input id="p-busca" placeholder="Buscar por loja…" style="margin-bottom:14px;">
-      <div class="card-panel"><div class="total-line"><span class="lbl">Total no filtro</span><span class="amt" id="p-total">R$ 0,00</span></div></div>
+      <div class="card-panel">
+        <div class="total-line">
+          <span class="lbl">Total no filtro</span>
+          <span class="amt" id="p-total">R$ 0,00</span>
+        </div>
+      </div>
       <div class="card-panel" id="listaParcelas"></div>
     </section>
+
     <section id="view-resumo" class="hidden">
       <h2 class="section-title">Resumo mensal</h2>
-      <div class="filters"><select id="r-ano"></select></div>
+      <div class="filters">
+        <select id="r-ano"></select>
+      </div>
       <div class="month-grid" id="resumoGrid"></div>
+
       <h2 class="section-title">Consulta diária</h2>
-      <div class="filters"><select id="d-mes"></select></div>
+      <div class="filters">
+        <select id="d-mes"></select>
+      </div>
       <div class="card-panel" id="diarioList" style="padding:6px 10px;"></div>
     </section>
+
     <section id="view-saldo" class="hidden">
       <h2 class="section-title">Saldo em conta</h2>
-      <div class="card-panel"><div class="total-line" style="border-top:none;padding-top:0;margin-top:0;"><span class="lbl">Saldo atual (hoje)</span><span class="amt" id="saldoAtualVal">R$ 0,00</span></div><p class="small-note" id="saldoRefInfo"></p></div>
+      <div class="card-panel">
+        <div class="total-line" style="border-top:none;padding-top:0;margin-top:0;">
+          <span class="lbl">Saldo atual (hoje)</span>
+          <span class="amt" id="saldoAtualVal">R$ 0,00</span>
+        </div>
+        <p class="small-note" id="saldoRefInfo"></p>
+      </div>
+
       <h2 class="section-title">Saldo de referência</h2>
-      <div class="card-panel"><p class="small-note" style="margin-top:0;">Informe o saldo real da sua conta em uma data conhecida.</p><label for="s-ref-valor">Saldo nessa data (R$)</label><input id="s-ref-valor" type="number" step="0.01"><label for="s-ref-data">Data desse saldo</label><input id="s-ref-data" type="date"><button class="primary" id="btnSalvarRef">Salvar saldo de referência</button></div>
+      <div class="card-panel">
+        <p class="small-note" style="margin-top:0;">Informe o saldo real da sua conta em uma data conhecida (ex: hoje). O app calcula a variação a partir daí, somando entradas e subtraindo o que vence.</p>
+        <label for="s-ref-valor">Saldo nessa data (R$)</label>
+        <input id="s-ref-valor" type="number" step="0.01">
+        <label for="s-ref-data">Data desse saldo</label>
+        <input id="s-ref-data" type="date">
+        <button class="primary" id="btnSalvarRef">Salvar saldo de referência</button>
+      </div>
+
       <h2 class="section-title">Entradas mensais</h2>
-      <div class="card-panel"><label for="e-desc">Descrição</label><input id="e-desc" placeholder="Ex: Salário, Aluguel…"><div class="row2"><div><label for="e-mes">Mês</label><select id="e-mes"></select></div><div><label for="e-ano">Ano</label><input id="e-ano" type="number"></div></div><label for="e-valor">Valor da entrada (R$)</label><input id="e-valor" type="number" step="0.01"><label for="e-data">Data do crédito</label><input id="e-data" type="date"><button class="primary" id="btnSalvarEntrada">Salvar entrada</button></div>
+      <div class="card-panel">
+        <label for="e-desc">Descrição</label>
+        <input id="e-desc" placeholder="Ex: Salário, Aluguel, Freela…">
+        <div class="row2">
+          <div>
+            <label for="e-mes">Mês</label>
+            <select id="e-mes"></select>
+          </div>
+          <div>
+            <label for="e-ano">Ano</label>
+            <input id="e-ano" type="number">
+          </div>
+        </div>
+        <label for="e-valor">Valor da entrada (R$)</label>
+        <input id="e-valor" type="number" step="0.01">
+        <label for="e-data">Data do crédito</label>
+        <input id="e-data" type="date">
+        <p class="small-note" style="margin-top:4px;">Sugerimos automaticamente o último dia útil do mês escolhido (você pode ajustar). Cadastre uma entrada separada para cada fonte de renda (ex: Salário e Aluguel), mesmo que caiam no mesmo mês.</p>
+        <button class="primary" id="btnSalvarEntrada">Salvar entrada</button>
+      </div>
       <div class="card-panel" id="listaEntradas"></div>
+
       <h2 class="section-title">Evolução mensal</h2>
-      <div class="filters"><select id="s-ano"></select></div>
+      <div class="filters">
+        <select id="s-ano"></select>
+      </div>
       <div class="month-grid" id="saldoGrid"></div>
     </section>
+
     <section id="view-loja" class="hidden">
       <h2 class="section-title">Consulta por loja</h2>
-      <div class="card-panel"><label for="l-ano">Ano</label><select id="l-ano"></select><label for="l-mes">Mês</label><select id="l-mes"></select><label for="l-loja">Loja</label><select id="l-loja"></select>
-        <div class="total-line"><span class="lbl">Gasto no mês</span><span class="amt" id="l-mesval">R$ 0,00</span></div><div class="total-line"><span class="lbl">Acumulado no ano</span><span class="amt" id="l-anoval">R$ 0,00</span></div></div>
+      <div class="card-panel">
+        <label for="l-ano">Ano</label>
+        <select id="l-ano"></select>
+        <label for="l-mes">Mês</label>
+        <select id="l-mes"></select>
+        <label for="l-loja">Loja</label>
+        <select id="l-loja"></select>
+        <div class="total-line">
+          <span class="lbl">Gasto no mês</span>
+          <span class="amt" id="l-mesval">R$ 0,00</span>
+        </div>
+        <div class="total-line">
+          <span class="lbl">Acumulado no ano (até o mês)</span>
+          <span class="amt" id="l-anoval">R$ 0,00</span>
+        </div>
+      </div>
     </section>
+
     <section id="view-cartoes" class="hidden">
       <h2 class="section-title">Cartões e regras</h2>
       <div class="card-panel" id="listaCartoes"></div>
       <h2 class="section-title">Nova regra / cartão</h2>
-      <div class="card-panel"><label for="c-nome">Cartão</label><input id="c-nome" list="cartoes-list" placeholder="Ex: Visa, Elo…"><datalist id="cartoes-list"></datalist>
-        <div class="row2"><div><label for="c-fech">Dia fechamento</label><input id="c-fech" type="number" min="0" max="31"></div><div><label for="c-venc">Dia vencimento</label><input id="c-venc" type="number" min="0" max="31"></div></div>
-        <label for="c-desde">Válido a partir de</label><input id="c-desde" type="date"><button class="primary" id="btnSalvarRegra">Salvar regra</button></div>
-      <h2 class="section-title">Backup</h2>
       <div class="card-panel">
+        <label for="c-nome">Cartão</label>
+        <input id="c-nome" list="cartoes-list" placeholder="Ex: Visa, Elo, Nubank…">
+        <datalist id="cartoes-list"></datalist>
+        <div class="row2">
+          <div>
+            <label for="c-fech">Dia fechamento</label>
+            <input id="c-fech" type="number" min="0" max="31">
+          </div>
+          <div>
+            <label for="c-venc">Dia vencimento</label>
+            <input id="c-venc" type="number" min="0" max="31">
+          </div>
+        </div>
+        <label for="c-desde">Válido a partir de</label>
+        <input id="c-desde" type="date">
+        <button class="primary" id="btnSalvarRegra">Salvar regra</button>
+        <p class="small-note">Use dia 0/0 para cartões de débito ou compras à vista. Quando o banco mudar a data de fechamento ou vencimento, cadastre uma nova regra aqui — o histórico anterior é preservado.</p>
+      </div>
+
+      <h2 class="section-title">Backup dos dados</h2>
+      <div class="card-panel">
+        <p class="small-note" style="margin-top:0;">Este app já salva tudo automaticamente no seu celular (nesse navegador). Ainda assim, faça backups de tempos em tempos — se você limpar os dados do navegador, desinstalar o app do GitHub Pages da tela inicial ou trocar de celular, os dados salvos aqui se perdem. O backup é sua cópia de segurança fora do navegador.</p>
         <button class="primary" id="btnExportar">Exportar backup (.json)</button>
-        <button class="ghost" id="btnImportarTrigger" style="margin-top: 10px;">Importar backup (.json)</button>
-        <input type="file" id="inputImportar" accept=".json" class="hidden">
-      </div> (.json)</button><p class="small-note" id="lastExportInfo"></p></div>
+        <p class="small-note" id="lastExportInfo"></p>
+      </div>
+      <div class="card-panel">
+        <label for="f-importar">Restaurar a partir de um backup</label>
+        <input id="f-importar" type="file" accept="application/json,.json">
+        <p class="small-note">Isso substitui os dados atuais do app pelos dados do arquivo escolhido. Use se perder os dados ou trocar de celular.</p>
+        <button class="ghost" id="btnImportar">Restaurar este arquivo</button>
+      </div>
     </section>
+
   </main>
-  <nav class="bottom"><button data-view="lancar" class="active"><span class="ic">＋</span>Lançar</button><button data-view="parcelas"><span class="ic">☰</span>Parcelas</button><button data-view="resumo"><span class="ic">▦</span>Resumo</button><button data-view="saldo"><span class="ic">$</span>Saldo</button><button data-view="loja"><span class="ic">⌕</span>Por loja</button><button data-view="cartoes"><span class="ic">▤</span>Cartões</button></nav>
+
+  <nav class="bottom">
+    <button data-view="lancar" class="active"><span class="ic">＋</span>Lançar</button>
+    <button data-view="parcelas"><span class="ic">☰</span>Parcelas</button>
+    <button data-view="resumo"><span class="ic">▦</span>Resumo</button>
+    <button data-view="saldo"><span class="ic">$</span>Saldo</button>
+    <button data-view="loja"><span class="ic">⌕</span>Por loja</button>
+    <button data-view="cartoes"><span class="ic">▤</span>Cartões</button>
+  </nav>
 </div>
 <div class="toast" id="toast"></div>
+
 <script>
 const SEED_PURCHASES = [{"loja": "Exemplo de Loja", "data": "2026-07-07", "cartao": "Visa", "valorTotal": 0.0, "parcelas": 1, "id": "seed_0"}];
-const SEED_RULES = [{"cartao": "A Vista", "diaFechamento": 0, "diaVencimento": 0, "validoDesde": "2000-01-01"}, {"cartao": "Elo", "diaFechamento": 24, "diaVencimento": 5, "validoDesde": "2026-06-24"}, {"cartao": "Visa", "diaFechamento": 22, "diaVencimento": 1, "validoDesde": "2026-07-22"}];
-let purchases=[], rules=[], incomes=[], saldoRef=null;
-const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
-const DIAS_SEMANA=["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
-const fmtBRL=v=>(isFinite(v)?v:0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const parseISO=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d);};
-const toISO=d=>{const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());};
-const fmtBR=d=>d.toLocaleDateString('pt-BR');
-const uid=()=>'p_'+Date.now()+'_'+Math.floor(Math.random()*10000);
-function lastBusinessDay(ano,mes){let d=new Date(ano,mes+1,0);while(d.getDay()===0||d.getDay()===6){d.setDate(d.getDate()-1);}return d;}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+const SEED_RULES = [
+  {"cartao": "A Vista", "diaFechamento": 0, "diaVencimento": 0, "validoDesde": "2000-01-01"},
+  {"cartao": "Elo", "diaFechamento": 24, "diaVencimento": 5, "validoDesde": "2026-06-24"},
+  {"cartao": "Visa", "diaFechamento": 22, "diaVencimento": 1, "validoDesde": "2026-07-22"}
+];
+let purchases = [];
+let rules = [];
+let incomes = [];
+let saldoRef = null; // {valor, data}
+
+const MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const DIAS_SEMANA = ["domingo","segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado"];
+const fmtBRL = v => (isFinite(v)?v:0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const parseISO = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); };
+const toISO = d => { const p = n => String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); };
+const fmtBR = d => d.toLocaleDateString('pt-BR');
+const uid = () => 'p_' + Date.now() + '_' + Math.floor(Math.random()*10000);
+
+function lastBusinessDay(ano, mes){
+  let d = new Date(ano, mes+1, 0);
+  while(d.getDay()===0 || d.getDay()===6){ d.setDate(d.getDate()-1); }
+  return d;
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
 async function loadData(){
-  // Tenta pegar do LocalStorage
-  const p = localStorage.getItem('cc_purchases');
-  purchases = p ? JSON.parse(p) : SEED_PURCHASES.slice();
-  
-  // GARANTIA: Se o backup importou, os dados estão aqui. 
-  // Forçamos o recarregamento das listas na tela imediatamente:
-  if (typeof renderCartoes === 'function') renderCartoes();
-  
-  // Adicione aqui a chamada para as funções que desenham as listas na tela
-  // Exemplo: if (typeof renderRecentes === 'function') renderRecentes();
-  
-  await saveAll();
+  try{
+    const raw = localStorage.getItem('cc_purchases');
+    purchases = raw ? JSON.parse(raw) : null;
+  }catch(e){ purchases = null; }
+  try{
+    const raw2 = localStorage.getItem('cc_rules');
+    rules = raw2 ? JSON.parse(raw2) : null;
+  }catch(e){ rules = null; }
+  try{
+    const raw3 = localStorage.getItem('cc_incomes');
+    incomes = raw3 ? JSON.parse(raw3) : [];
+  }catch(e){ incomes = []; }
+  try{
+    const raw4 = localStorage.getItem('cc_saldo_ref');
+    saldoRef = raw4 ? JSON.parse(raw4) : null;
+  }catch(e){ saldoRef = null; }
+
+  let needSave = false;
+  if(!purchases){ purchases = SEED_PURCHASES.slice(); needSave = true; }
+  if(!rules){ rules = SEED_RULES.slice(); needSave = true; }
+  rules.forEach(r=>{ if(!r.id){ r.id = uid(); needSave = true; } });
+  if(needSave){ await saveAll(); }
 }
-async function saveAll(){localStorage.setItem('cc_purchases',JSON.stringify(purchases));localStorage.setItem('cc_rules',JSON.stringify(rules));localStorage.setItem('cc_incomes',JSON.stringify(incomes));localStorage.setItem('cc_saldo_ref',JSON.stringify(saldoRef));}
-function ruleFor(cartao,date){const cartaoNormalizado=cartao.toUpperCase();const cands=rules.filter(r=>r.cartao.toUpperCase()===cartaoNormalizado&&parseISO(r.validoDesde)<=date);if(!cands.length)return{diaFechamento:0,diaVencimento:0};cands.sort((a,b)=>parseISO(b.validoDesde)-parseISO(a.validoDesde));return cands[0];}
+
+async function saveAll(){
+  try{ localStorage.setItem('cc_purchases', JSON.stringify(purchases)); }catch(e){ console.error(e); showToast('Não consegui salvar (armazenamento do navegador cheio ou bloqueado)'); }
+  try{ localStorage.setItem('cc_rules', JSON.stringify(rules)); }catch(e){ console.error(e); }
+  try{ localStorage.setItem('cc_incomes', JSON.stringify(incomes)); }catch(e){ console.error(e); }
+  try{ localStorage.setItem('cc_saldo_ref', JSON.stringify(saldoRef)); }catch(e){ console.error(e); }
+}
+
+function ruleFor(cartao, date){
+  const cartaoNormalizado = cartao.toUpperCase();
+  const cands = rules.filter(r => r.cartao.toUpperCase() === cartaoNormalizado && parseISO(r.validoDesde) <= date);
+  if(!cands.length) return {diaFechamento:0, diaVencimento:0};
+  cands.sort((a,b)=> parseISO(b.validoDesde) - parseISO(a.validoDesde));
+  return cands[0];
+}
+
 function firstDueDate(purchase){
-  const d=parseISO(purchase.data);
-  if(purchase.cartao==='A Vista')return d;
-  const rule=ruleFor(purchase.cartao,d);
-  return new Date(d.getFullYear(),d.getMonth()+(d.getDate()<=rule.diaFechamento?1:2),rule.diaVencimento);
+  const d = parseISO(purchase.data);
+  if(purchase.cartao === 'A Vista') return d;
+  const rule = ruleFor(purchase.cartao, d);
+  if(!rule.diaFechamento && !rule.diaVencimento) return d;
+  const day = d.getDate();
+  const offset = day <= rule.diaFechamento ? 1 : 2;
+  return new Date(d.getFullYear(), d.getMonth()+offset, rule.diaVencimento);
 }
+
 function installmentsFor(purchase){
-  const start=firstDueDate(purchase);
-  const n=Math.max(1,purchase.parcelas||1);
-  const value=purchase.valorTotal/n;
-  const list=[];
-  for(let i=0;i<n;i++)list.push({purchaseId:purchase.id,loja:purchase.loja,cartao:purchase.cartao,num:i+1,total:n,date:new Date(start.getFullYear(),start.getMonth()+i,start.getDate()),value});
+  const start = firstDueDate(purchase);
+  const n = Math.max(1, purchase.parcelas||1);
+  const value = purchase.valorTotal / n;
+  const list = [];
+  for(let i=0;i<n;i++){
+    list.push({
+      purchaseId: purchase.id,
+      loja: purchase.loja,
+      cartao: purchase.cartao,
+      num: i+1,
+      total: n,
+      date: new Date(start.getFullYear(), start.getMonth()+i, start.getDate()),
+      value
+    });
+  }
   return list;
 }
-function allInstallments(){let out=[];for(const p of purchases)out=out.concat(installmentsFor(p));return out.sort((a,b)=>a.date-b.date);}
-function tagClass(cartao){const c=(cartao||'').toLowerCase();if(c==='visa')return 'visa';if(c==='elo')return 'elo';if(c==='a vista'||c==='à vista')return 'avista';return 'outro';}
-function uniqueCartoes(){return [...new Set(rules.map(r=>r.cartao.toUpperCase()))].sort();}
+
+function allInstallments(){
+  let out = [];
+  for(const p of purchases){ out = out.concat(installmentsFor(p)); }
+  out.sort((a,b)=> a.date - b.date);
+  return out;
+}
+
+function tagClass(cartao){
+  const c = (cartao||'').toLowerCase();
+  if(c==='visa') return 'visa';
+  if(c==='elo') return 'elo';
+  if(c==='a vista' || c==='à vista') return 'avista';
+  return 'outro';
+}
+
+function uniqueCartoes(){
+  return [...new Set(rules.map(r=>r.cartao.toUpperCase()))].sort();
+}
+function uniqueLojas(){
+  return [...new Set(purchases.map(p=>p.loja))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+}
+
+// ---------- NAV ----------
+document.querySelectorAll('nav.bottom button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('nav.bottom button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+    document.getElementById('view-'+btn.dataset.view).classList.remove('hidden');
+    refreshView(btn.dataset.view);
+  });
+});
+
+// ---------- HEADER ----------
+function renderHeader(){
+  const inst = allInstallments();
+  const today = new Date();
+  const y = today.getFullYear(), m = today.getMonth();
+  const totalMes = inst.filter(i=>i.date.getFullYear()===y && i.date.getMonth()===m).reduce((s,i)=>s+i.value,0);
+  document.getElementById('headerTotal').textContent = fmtBRL(totalMes) + ' este mês';
+  document.getElementById('headerSaldo').textContent = saldoRef ? ('Saldo atual: ' + fmtBRL(saldoAcumuladoAt(today))) : 'Saldo atual: defina na aba Saldo';
+
+  const strip = document.getElementById('monthStrip');
+  strip.innerHTML='';
+  for(let k=0;k<4;k++){
+    const dt = new Date(y, m+k, 1);
+    const total = inst.filter(i=>i.date.getFullYear()===dt.getFullYear() && i.date.getMonth()===dt.getMonth()).reduce((s,i)=>s+i.value,0);
+    const div = document.createElement('div');
+    div.className='month-card';
+    div.innerHTML = `<div class="lbl">${MESES[dt.getMonth()].slice(0,3)}/${String(dt.getFullYear()).slice(2)}</div><div class="val">${fmtBRL(total)}</div>`;
+    strip.appendChild(div);
+  }
+}
+
+// ---------- LANÇAR ----------
+function populateCartaoSelect(){
+  const sel = document.getElementById('f-cartao');
+  sel.innerHTML = uniqueCartoes().map(c=>`<option value="${c}">${c}</option>`).join('');
+  const dl = document.getElementById('lojas-list');
+  dl.innerHTML = uniqueLojas().map(l=>`<option value="${l}"></option>`).join('');
+  const dlc = document.getElementById('cartoes-list');
+  dlc.innerHTML = uniqueCartoes().map(c=>`<option value="${c}"></option>`).join('');
+}
+
+function renderRecentes(){
+  const box = document.getElementById('listaRecentes');
+  const recent = purchases.slice().sort((a,b)=> b.data.localeCompare(a.data) || (b.id||'').localeCompare(a.id||'')).slice(0,12);
+  if(!recent.length){ box.innerHTML = '<p class="empty">Nenhum lançamento ainda.</p>'; return; }
+  box.innerHTML = recent.map(p=>{
+    const inst = installmentsFor(p);
+    const parcelaInfo = inst.length===1
+      ? `parcela única em ${fmtBR(inst[0].date)}`
+      : `1ª em ${fmtBR(inst[0].date)} · última em ${fmtBR(inst[inst.length-1].date)}`;
+    return `
+    <div class="entry">
+      <div>
+        <div class="name">${p.loja}</div>
+        <div class="meta"><span class="tag ${tagClass(p.cartao)}">${p.cartao}</span>${fmtBR(parseISO(p.data))} · ${p.parcelas}x</div>
+        <div class="meta">${parcelaInfo}</div>
+        <button class="del-btn" data-del="${p.id}">excluir</button>
+      </div>
+      <div class="value">${fmtBRL(p.valorTotal)}</div>
+    </div>
+  `;}).join('');
+  box.querySelectorAll('[data-del]').forEach(b=>{
+    b.addEventListener('click', async ()=>{
+      purchases = purchases.filter(p=>p.id !== b.dataset.del);
+      await saveAll();
+      renderRecentes(); renderHeader(); populateCartaoSelect();
+      showToast('Lançamento excluído');
+    });
+  });
+}
+
+function updatePreview(){
+  const valor = parseFloat(document.getElementById('f-valor').value)||0;
+  const parc = parseInt(document.getElementById('f-parcelas').value)||1;
+  const dataStr = document.getElementById('f-data').value;
+  const cartao = document.getElementById('f-cartao').value;
+  const el = document.getElementById('previewParcela');
+  if(!valor || !dataStr){ el.textContent=''; return; }
+  const fake = {loja:'', data:dataStr, cartao, valorTotal:valor, parcelas:parc};
+  const inst = installmentsFor(fake);
+  if(inst.length===1){
+    el.textContent = `1ª (e única) parcela: ${fmtBRL(inst[0].value)} em ${fmtBR(inst[0].date)}`;
+  } else {
+    el.textContent = `${parc}x de ${fmtBRL(inst[0].value)} · 1ª em ${fmtBR(inst[0].date)} · última em ${fmtBR(inst[inst.length-1].date)}`;
+  }
+}
+['f-valor','f-parcelas','f-data','f-cartao'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', updatePreview);
+  document.getElementById(id).addEventListener('change', updatePreview);
+});
+
+document.getElementById('btnSalvarCompra').addEventListener('click', async ()=>{
+  const loja = document.getElementById('f-loja').value.trim();
+  const data = document.getElementById('f-data').value;
+  const cartao = document.getElementById('f-cartao').value;
+  const valor = parseFloat(document.getElementById('f-valor').value);
+  const parcelas = parseInt(document.getElementById('f-parcelas').value)||1;
+  if(!loja || !data || !valor){ showToast('Preencha loja, data e valor'); return; }
+  purchases.push({id:uid(), loja, data, cartao, valorTotal:valor, parcelas});
+  await saveAll();
+  document.getElementById('f-loja').value='';
+  document.getElementById('f-valor').value='';
+  document.getElementById('f-parcelas').value='1';
+  updatePreview();
+  renderRecentes(); renderHeader(); populateCartaoSelect();
+  refreshView('parcelas'); refreshView('resumo'); refreshView('loja');
+  showToast('Lançamento salvo');
+});
+
+// ---------- PARCELAS ----------
+function populateAnoMesSelects(){
+  const inst = allInstallments();
+  const today = new Date();
+  const anoAtual = today.getFullYear();
+  const proximoAno = anoAtual + 1;
+
+  // Garante que o ano atual e o próximo sempre apareçam, mesmo sem parcelas lançadas neles ainda
+  const anosSet = new Set(inst.map(i => i.date.getFullYear()));
+  anosSet.add(anoAtual);
+  anosSet.add(proximoAno);
+  const anos = [...anosSet].sort();
+
+  const mesOpts = '<option value="">Todos os meses</option>' + MESES.map((m,i)=>`<option value="${i}">${m}</option>`).join('');
+  const anoOptsAll = '<option value="">Todos os anos</option>' + anos.map(a=>`<option value="${a}">${a}</option>`).join('');
+  const anoOptsPlain = anos.map(a=>`<option value="${a}">${a}</option>`).join('');
+
+  document.getElementById('p-ano').innerHTML = anoOptsAll;
+  document.getElementById('p-mes').innerHTML = mesOpts;
+
+  document.getElementById('r-ano').innerHTML = anoOptsPlain;
+  document.getElementById('r-ano').value = anoAtual;
+
+  document.getElementById('l-ano').innerHTML = anoOptsPlain;
+  document.getElementById('l-ano').value = anoAtual;
+  document.getElementById('l-mes').innerHTML = MESES.map((m,i)=>`<option value="${i}">${m}</option>`).join('');
+  document.getElementById('l-mes').value = today.getMonth();
+
+  document.getElementById('l-loja').innerHTML = uniqueLojas().map(l=>`<option value="${l}">${l}</option>`).join('');
+
+  document.getElementById('e-mes').innerHTML = MESES.map((m,i)=>`<option value="${i}">${m}</option>`).join('');
+  document.getElementById('e-mes').value = today.getMonth();
+  document.getElementById('e-ano').value = anoAtual;
+  updateSugestaoDataEntrada();
+
+  document.getElementById('s-ano').innerHTML = anoOptsPlain;
+  document.getElementById('s-ano').value = anoAtual;
+
+  document.getElementById('d-mes').innerHTML = MESES.map((m,i)=>`<option value="${i}">${m}</option>`).join('');
+  document.getElementById('d-mes').value = today.getMonth();
+}
+
+function renderParcelas(){
+  const anoSel = document.getElementById('p-ano').value;
+  const mesSel = document.getElementById('p-mes').value;
+  const busca = document.getElementById('p-busca').value.trim().toLowerCase();
+  let inst = allInstallments();
+  if(anoSel) inst = inst.filter(i=>String(i.date.getFullYear())===anoSel);
+  if(mesSel!=='') inst = inst.filter(i=>String(i.date.getMonth())===mesSel);
+  if(busca) inst = inst.filter(i=>i.loja.toLowerCase().includes(busca));
+  const total = inst.reduce((s,i)=>s+i.value,0);
+  document.getElementById('p-total').textContent = fmtBRL(total);
+
+  const box = document.getElementById('listaParcelas');
+  if(!inst.length){ box.innerHTML='<p class="empty">Nenhuma parcela no filtro.</p>'; return; }
+  box.innerHTML = inst.slice(0,300).map(i=>`
+    <div class="entry">
+      <div>
+        <div class="name">${i.loja}</div>
+        <div class="meta"><span class="tag ${tagClass(i.cartao)}">${i.cartao}</span>${fmtBR(i.date)} · parcela ${i.num}/${i.total}</div>
+        <button class="del-btn" data-delpur="${i.purchaseId}">excluir lançamento (todas as parcelas)</button>
+      </div>
+      <div class="value">${fmtBRL(i.value)}</div>
+    </div>
+  `).join('');
+  box.querySelectorAll('[data-delpur]').forEach(b=>{
+    b.addEventListener('click', async ()=>{
+      const ok = confirm('Excluir esse lançamento e todas as parcelas dele?');
+      if(!ok) return;
+      purchases = purchases.filter(p=>p.id !== b.dataset.delpur);
+      await saveAll();
+      renderParcelas(); renderRecentes(); renderHeader(); renderResumo(); renderSaldo(); populateCartaoSelect(); populateAnoMesSelects();
+      showToast('Lançamento excluído');
+    });
+  });
+}
+document.getElementById('p-ano').addEventListener('change', renderParcelas);
+document.getElementById('p-mes').addEventListener('change', renderParcelas);
+document.getElementById('p-busca').addEventListener('input', renderParcelas);
+
+// ---------- RESUMO ----------
+function renderResumo(){
+  const ano = parseInt(document.getElementById('r-ano').value);
+  const inst = allInstallments().filter(i=>i.date.getFullYear()===ano);
+  const grid = document.getElementById('resumoGrid');
+  const today = new Date();
+  grid.innerHTML = MESES.map((m,i)=>{
+    const doMes = inst.filter(x=>x.date.getMonth()===i).sort((a,b)=>a.date-b.date);
+    const total = doMes.reduce((s,x)=>s+x.value,0);
+    const isCurrent = ano===today.getFullYear() && i===today.getMonth();
+    const detailHtml = doMes.length
+      ? doMes.map(x=>`<div class="dia-detail-item"><span>${x.loja} <span class="tag ${tagClass(x.cartao)}">${x.cartao}</span> ${fmtBR(x.date)} (${x.num}/${x.total})</span><span>${fmtBRL(x.value)}</span></div>`).join('')
+      : '<div class="dia-detail-item empty-detail">Nenhuma parcela nesse mês</div>';
+    return `<div class="month-box ${isCurrent?'current':''}" data-mtoggle="${ano}-${i}" style="cursor:pointer;">
+        <div class="m">${m}</div><div class="v">${fmtBRL(total)}</div>
+      </div>
+      <div class="dia-detail hidden month-detail" id="mdetail-${ano}-${i}" style="grid-column:span 2;">${detailHtml}</div>`;
+  }).join('');
+  grid.querySelectorAll('[data-mtoggle]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      document.getElementById('mdetail-'+el.dataset.mtoggle).classList.toggle('hidden');
+    });
+  });
+  renderDiario();
+}
+document.getElementById('r-ano').addEventListener('change', renderResumo);
+
+function renderDiario(){
+  const ano = parseInt(document.getElementById('r-ano').value);
+  const mesSel = document.getElementById('d-mes').value;
+  const mes = mesSel==='' ? new Date().getMonth() : parseInt(mesSel);
+  const totalDias = new Date(ano, mes+1, 0).getDate();
+  const today = new Date();
+  let html = '';
+  for(let d=1; d<=totalDias; d++){
+    const date = new Date(ano, mes, d);
+    const iso = toISO(date);
+    const dayPurchases = purchases.filter(p => p.data === iso);
+    const soma = dayPurchases.reduce((s,p)=>s+p.valorTotal,0);
+    const dow = date.getDay();
+    let cls = '';
+    if(dow===6) cls='sab';
+    if(dow===0) cls='dom';
+    const isHoje = iso===toISO(today) ? ' hoje' : '';
+    const detailHtml = dayPurchases.length
+      ? dayPurchases.map(p=>`<div class="dia-detail-item"><span>${p.loja} <span class="tag ${tagClass(p.cartao)}">${p.cartao}</span></span><span>${fmtBRL(p.valorTotal)}</span></div>`).join('')
+      : '<div class="dia-detail-item empty-detail">Nenhum lançamento nesse dia</div>';
+    html += `<div class="dia-row ${cls}${isHoje}" data-toggle="${iso}"><span>${fmtBR(date)}</span><span class="v">${fmtBRL(soma)}</span><span class="dw">${DIAS_SEMANA[dow]}</span></div>
+      <div class="dia-detail hidden" id="detail-${iso}">${detailHtml}</div>`;
+  }
+  document.getElementById('diarioList').innerHTML = html;
+  document.querySelectorAll('#diarioList [data-toggle]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      document.getElementById('detail-'+el.dataset.toggle).classList.toggle('hidden');
+    });
+  });
+}
+document.getElementById('d-mes').addEventListener('change', renderDiario);
+
+// ---------- LOJA ----------
+function renderLoja(){
+  const ano = parseInt(document.getElementById('l-ano').value);
+  const mes = parseInt(document.getElementById('l-mes').value);
+  const loja = document.getElementById('l-loja').value;
+  const inst = allInstallments();
+  const doMes = inst.filter(i=>i.date.getFullYear()===ano && i.date.getMonth()===mes && i.loja===loja).reduce((s,i)=>s+i.value,0);
+  const doAno = inst.filter(i=>i.date.getFullYear()===ano && i.date.getMonth()<=mes && i.loja===loja).reduce((s,i)=>s+i.value,0);
+  document.getElementById('l-mesval').textContent = fmtBRL(doMes);
+  document.getElementById('l-anoval').textContent = fmtBRL(doAno);
+}
+['l-ano','l-mes','l-loja'].forEach(id=>document.getElementById(id).addEventListener('change', renderLoja));
+
+// ---------- CARTÕES ----------
+// ---------- CARTÕES ----------
 function renderCartoes(){
-  const box=document.getElementById('listaCartoes');
-  const cartoes=uniqueCartoes();
-  if(!cartoes.length){box.innerHTML='<p class="empty">Nenhum cartão cadastrado.</p>';return;}
-  box.innerHTML=cartoes.map(c=>{
-    const hist=rules.filter(r=>r.cartao.toUpperCase()===c).sort((a,b)=>parseISO(b.validoDesde)-parseISO(a.validoDesde));
-    return `<div style="margin-bottom:14px;"><div class="name" style="margin-bottom:4px;"><span class="tag ${tagClass(c)}">${c}</span></div>
-    ${hist.map(r=>`<div class="rule-row"><span>desde ${fmtBR(parseISO(r.validoDesde))}</span><span class="cd">F:${r.diaFechamento} V:${r.diaVencimento}</span><button class="del-btn" data-delrule="${r.id}" style="margin-left:8px;">excluir</button></div>`).join('')}
+  const box = document.getElementById('listaCartoes');
+  const cartoes = uniqueCartoes();
+  if(!cartoes.length){ box.innerHTML='<p class="empty">Nenhum cartão cadastrado.</p>'; return; }
+  box.innerHTML = cartoes.map(c=>{
+    const hist = rules.filter(r=>r.cartao.toUpperCase()===c).sort((a,b)=> parseISO(b.validoDesde)-parseISO(a.validoDesde));
+    return `<div style="margin-bottom:14px;">
+      <div class="name" style="margin-bottom:4px;"><span class="tag ${tagClass(c)}">${c}</span></div>
+      ${hist.map(r=>`<div class="rule-row"><span>desde ${fmtBR(parseISO(r.validoDesde))}</span><span class="cd">fecha dia ${r.diaFechamento} · vence dia ${r.diaVencimento}</span><button class="del-btn" data-delrule="${r.id}" style="margin-left:8px;">excluir</button></div>`).join('')}
     </div>`;
   }).join('');
   box.querySelectorAll('[data-delrule]').forEach(b=>{
-    b.addEventListener('click',async()=>{if(confirm('Excluir essa regra?')){rules=rules.filter(r=>r.id!==b.dataset.delrule);await saveAll();renderCartoes();populateCartaoSelect();renderHeader();}});
+    b.addEventListener('click', async ()=>{
+      const ok = confirm('Excluir essa regra?');
+      if(!ok) return;
+      rules = rules.filter(r=>r.id !== b.dataset.delrule);
+      await saveAll();
+      renderCartoes(); populateCartaoSelect(); renderHeader(); renderRecentes(); renderParcelas(); renderResumo(); renderSaldo();
+      showToast('Regra excluída');
+    });
   });
 }
-function populateCartaoSelect(){const sel=document.getElementById('f-cartao');sel.innerHTML=uniqueCartoes().map(c=>`<option value="${c}">${c}</option>`).join('');const dl=document.getElementById('cartoes-list');dl.innerHTML=uniqueCartoes().map(c=>`<option value="${c}"></option>`).join('');}
-document.getElementById('btnSalvarRegra').addEventListener('click',async()=>{
-  const c=document.getElementById('c-nome').value.trim(),f=parseInt(document.getElementById('c-fech').value),v=parseInt(document.getElementById('c-venc').value),d=document.getElementById('c-desde').value;
-  if(!c||isNaN(f)||!d){alert('Preencha os campos');return;}
-  rules.push({id:uid(),cartao:c,diaFechamento:f,diaVencimento:v,validoDesde:d});await saveAll();renderCartoes();populateCartaoSelect();
+
+document.getElementById('btnSalvarRegra').addEventListener('click', async ()=>{
+  const cartao = document.getElementById('c-nome').value.trim();
+  const fech = parseInt(document.getElementById('c-fech').value);
+  const venc = parseInt(document.getElementById('c-venc').value);
+  const desde = document.getElementById('c-desde').value;
+  if(!cartao || isNaN(fech) || isNaN(venc) || !desde){ showToast('Preencha todos os campos'); return; }
+  rules.push({id:uid(), cartao, diaFechamento:fech, diaVencimento:venc, validoDesde:desde});
+  await saveAll();
+  document.getElementById('c-nome').value='';
+  document.getElementById('c-fech').value='';
+  document.getElementById('c-venc').value='';
+  document.getElementById('c-desde').value='';
+  renderCartoes(); populateCartaoSelect();
+  showToast('Regra salva');
 });
-document.querySelectorAll('nav.bottom button').forEach(btn=>{btn.addEventListener('click',()=>{
-  document.querySelectorAll('nav.bottom button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
-  document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));document.getElementById('view-'+btn.dataset.view).classList.remove('hidden');
-});});
-async function init(){await loadData();renderCartoes();document.getElementById('veil').style.display='none';}
-init();
-// PWA: registro do service worker
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
-// FUNÇÕES DE BACKUP ADICIONADAS
-document.getElementById('btnExportar').addEventListener('click', () => {
-  const data = JSON.stringify({ purchases, rules, incomes, saldoRef });
-  const blob = new Blob([data], {type: 'application/json'});
+
+// ---------- SALDO ----------
+function saldoAcumuladoAt(dataLimite){
+  if(!saldoRef) return null;
+  const ref = parseISO(saldoRef.data);
+  const entradas = incomes.filter(i=>{ const d=parseISO(i.dataCredito); return d > ref && d <= dataLimite; }).reduce((s,i)=>s+i.valor,0);
+  const gastos = allInstallments().filter(x=> x.date > ref && x.date <= dataLimite).reduce((s,x)=>s+x.value,0);
+  return saldoRef.valor + entradas - gastos;
+}
+
+function renderSaldo(){
+  const info = document.getElementById('saldoRefInfo');
+  const valEl = document.getElementById('saldoAtualVal');
+  if(!saldoRef){
+    valEl.textContent = '—';
+    info.textContent = 'Defina o saldo de referência abaixo para começar a calcular.';
+  } else {
+    const hoje = new Date();
+    const saldo = saldoAcumuladoAt(hoje);
+    valEl.textContent = fmtBRL(saldo);
+    info.textContent = `Calculado a partir de ${fmtBRL(saldoRef.valor)} em ${fmtBR(parseISO(saldoRef.data))}, somando entradas e subtraindo o que já venceu até hoje.`;
+    document.getElementById('s-ref-valor').value = saldoRef.valor;
+    document.getElementById('s-ref-data').value = saldoRef.data;
+  }
+
+  const box = document.getElementById('listaEntradas');
+  const ordenadas = incomes.slice().sort((a,b)=> b.dataCredito.localeCompare(a.dataCredito));
+  if(!ordenadas.length){
+    box.innerHTML = '<p class="empty">Nenhuma entrada cadastrada ainda.</p>';
+  } else {
+    box.innerHTML = ordenadas.map(i=>`
+      <div class="entry">
+        <div>
+          <div class="name">${i.descricao || (MESES[i.mes]+'/'+i.ano)}</div>
+          <div class="meta">${MESES[i.mes]}/${i.ano} · crédito em ${fmtBR(parseISO(i.dataCredito))}</div>
+          <button class="del-btn" data-delinc="${i.id}">excluir</button>
+        </div>
+        <div class="value">${fmtBRL(i.valor)}</div>
+      </div>
+    `).join('');
+    box.querySelectorAll('[data-delinc]').forEach(b=>{
+      b.addEventListener('click', async ()=>{
+        incomes = incomes.filter(i=>i.id !== b.dataset.delinc);
+        await saveAll();
+        renderSaldo();
+        showToast('Entrada excluída');
+      });
+    });
+  }
+
+  renderSaldoGrid();
+}
+
+function renderSaldoGrid(){
+  const ano = parseInt(document.getElementById('s-ano').value) || new Date().getFullYear();
+  const grid = document.getElementById('saldoGrid');
+  const inst = allInstallments();
+  const today = new Date();
+  grid.innerHTML = MESES.map((m,i)=>{
+    const entradasMes = incomes.filter(x=>x.ano===ano && x.mes===i).reduce((s,x)=>s+x.valor,0);
+    const gastosMes = inst.filter(x=>x.date.getFullYear()===ano && x.date.getMonth()===i).reduce((s,x)=>s+x.value,0);
+    const saldoMes = entradasMes - gastosMes;
+    const fimDoMes = new Date(ano, i+1, 0);
+    const acumulado = saldoRef ? saldoAcumuladoAt(fimDoMes) : null;
+    const isCurrent = ano===today.getFullYear() && i===today.getMonth();
+    return `<div class="month-box ${isCurrent?'current':''}">
+      <div class="m">${m}</div>
+      <div class="v" style="font-size:14px;">Entrou: ${fmtBRL(entradasMes)}</div>
+      <div class="v" style="font-size:14px;color:var(--rust);">Venceu: ${fmtBRL(gastosMes)}</div>
+      <div class="v" style="font-size:14px;border-top:1px dashed var(--line);padding-top:4px;margin-top:4px;">Saldo mês: ${fmtBRL(saldoMes)}</div>
+      ${acumulado!==null ? `<div class="v" style="font-size:13px;color:var(--ink-soft);">Acum. até fim do mês: ${fmtBRL(acumulado)}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('btnSalvarRef').addEventListener('click', async ()=>{
+  const valor = parseFloat(document.getElementById('s-ref-valor').value);
+  const data = document.getElementById('s-ref-data').value;
+  if(isNaN(valor) || !data){ showToast('Preencha o valor e a data'); return; }
+  saldoRef = {valor, data};
+  await saveAll();
+  renderSaldo();
+  renderHeader();
+  showToast('Saldo de referência salvo');
+});
+
+document.getElementById('e-mes').addEventListener('change', updateSugestaoDataEntrada);
+document.getElementById('e-ano').addEventListener('input', updateSugestaoDataEntrada);
+function updateSugestaoDataEntrada(){
+  const mes = parseInt(document.getElementById('e-mes').value);
+  const ano = parseInt(document.getElementById('e-ano').value);
+  if(isNaN(mes) || isNaN(ano)) return;
+  document.getElementById('e-data').value = toISO(lastBusinessDay(ano, mes));
+}
+
+document.getElementById('btnSalvarEntrada').addEventListener('click', async ()=>{
+  const descricao = document.getElementById('e-desc').value.trim();
+  const mes = parseInt(document.getElementById('e-mes').value);
+  const ano = parseInt(document.getElementById('e-ano').value);
+  const valor = parseFloat(document.getElementById('e-valor').value);
+  const data = document.getElementById('e-data').value;
+  if(isNaN(mes) || isNaN(ano) || isNaN(valor) || !data){ showToast('Preencha todos os campos da entrada'); return; }
+  incomes.push({id:uid(), descricao, mes, ano, valor, dataCredito:data});
+  await saveAll();
+  document.getElementById('e-desc').value='';
+  document.getElementById('e-valor').value='';
+  renderSaldo();
+  renderHeader();
+  showToast('Entrada salva');
+});
+
+document.getElementById('s-ano').addEventListener('change', renderSaldoGrid);
+
+// ---------- BACKUP / RESTORE ----------
+const BACKUP_REMINDER_DIAS = 14;
+
+function exportarBackup(){
+  const payload = {
+    tipo: 'backup_controle_cartoes',
+    exportadoEm: new Date().toISOString(),
+    purchases,
+    rules,
+    incomes,
+    saldoRef
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'backup_cartoes.json'; a.click();
+  const stamp = toISO(new Date());
+  a.href = url;
+  a.download = `backup_cartoes_${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 2000);
+  const agora = new Date();
+  try{ localStorage.setItem('cc_last_backup', agora.toISOString()); }catch(e){}
+  document.getElementById('lastExportInfo').textContent = 'Último backup gerado em ' + fmtBR(agora) + ' às ' + agora.toLocaleTimeString('pt-BR');
+  showToast('Backup baixado');
+  checkBackupReminder();
+}
+
+document.getElementById('btnExportar').addEventListener('click', exportarBackup);
+
+function diasDesde(isoStr){
+  const d = new Date(isoStr);
+  return Math.floor((Date.now() - d.getTime()) / (1000*60*60*24));
+}
+
+function checkBackupReminder(){
+  const banner = document.getElementById('backupBanner');
+  let last;
+  try{ last = localStorage.getItem('cc_last_backup'); }catch(e){ last = null; }
+  if(!last){
+    banner.querySelector('.txt').textContent = 'Você ainda não fez nenhum backup dos seus lançamentos. Recomendo exportar agora, por segurança.';
+    banner.classList.remove('hidden');
+    return;
+  }
+  const dias = diasDesde(last);
+  if(dias >= BACKUP_REMINDER_DIAS){
+    banner.querySelector('.txt').textContent = `Já se passaram ${dias} dias desde o seu último backup. Bom exportar um novo.`;
+    banner.classList.remove('hidden');
+  } else {
+    banner.classList.add('hidden');
+  }
+}
+
+document.getElementById('bannerExportar').addEventListener('click', ()=>{
+  exportarBackup();
+});
+document.getElementById('bannerDepois').addEventListener('click', ()=>{
+  document.getElementById('backupBanner').classList.add('hidden');
 });
 
-document.getElementById('btnImportarTrigger').addEventListener('click', () => {
-  document.getElementById('inputImportar').click();
-});
-
-document.getElementById('inputImportar').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+document.getElementById('btnImportar').addEventListener('click', ()=>{
+  const input = document.getElementById('f-importar');
+  const file = input.files && input.files[0];
+  if(!file){ showToast('Escolha um arquivo de backup primeiro'); return; }
   const reader = new FileReader();
-  reader.onload = async (event) => {
-    try {
-      const data = JSON.parse(event.target.result);
-      
-      // Carrega os dados conforme a estrutura do seu arquivo
-      purchases = data.purchases || [];
-      
-      // Se o backup não tiver as outras chaves, inicializamos vazias para não quebrar
-      rules = data.rules || rules || []; 
-      incomes = data.incomes || [];
+  reader.onload = async (e)=>{
+    try{
+      const data = JSON.parse(e.target.result);
+      if(!Array.isArray(data.purchases) || !Array.isArray(data.rules)){
+        showToast('Arquivo inválido'); return;
+      }
+      const ok = confirm(`Este backup tem ${data.purchases.length} lançamentos e foi feito em ${data.exportadoEm ? new Date(data.exportadoEm).toLocaleString('pt-BR') : 'data desconhecida'}. Isso vai SUBSTITUIR os dados atuais do app. Continuar?`);
+      if(!ok) return;
+      purchases = data.purchases;
+      rules = data.rules;
+      incomes = Array.isArray(data.incomes) ? data.incomes : [];
       saldoRef = data.saldoRef || null;
-      
       await saveAll();
-      alert('Backup importado com sucesso! Se os dados não aparecerem, atualize a página.');
-      window.location.reload();
-    } catch (err) { alert('Erro ao importar: ' + err.message); }
+      populateCartaoSelect(); populateAnoMesSelects();
+      renderHeader(); renderRecentes(); renderParcelas(); renderResumo(); renderSaldo(); renderLoja(); renderCartoes();
+      updatePreview();
+      input.value = '';
+      showToast('Backup restaurado com sucesso');
+    }catch(err){
+      showToast('Não consegui ler esse arquivo');
+    }
   };
   reader.readAsText(file);
 });
+
+// ---------- REFRESH ORCHESTRATION ----------
+function refreshView(view){
+  if(view==='lancar'){ renderRecentes(); }
+  if(view==='parcelas'){ renderParcelas(); }
+  if(view==='resumo'){ renderResumo(); }
+  if(view==='saldo'){ renderSaldo(); }
+  if(view==='loja'){ renderLoja(); }
+  if(view==='cartoes'){ renderCartoes(); }
+}
+
+async function init(){
+  await loadData();
+  document.getElementById('f-data').value = toISO(new Date());
+  document.getElementById('c-desde').value = toISO(new Date());
+  populateCartaoSelect();
+  populateAnoMesSelects();
+  renderHeader();
+  renderRecentes();
+  renderParcelas();
+  renderResumo();
+  renderSaldo();
+  renderLoja();
+  renderCartoes();
+  updatePreview();
+  checkBackupReminder();
+  document.getElementById('veil').style.display='none';
+}
+init();
 </script>
 </body>
 </html>
