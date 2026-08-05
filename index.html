@@ -233,6 +233,18 @@ nav.bottom button.active{color:var(--ink);background:var(--paper-2);}
 .rule-row:last-child{border-bottom:none;}
 .rule-row .cd{font-family:'Courier New',monospace;color:var(--ink-soft);}
 .rule-row .del-btn{margin-left:0;flex:0 0 auto;}
+.loja-row{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 0;border-bottom:1px solid var(--line);
+}
+.loja-row:last-child{border-bottom:none;}
+.loja-row input{width:auto;flex:1;padding:8px 10px;font-size:13.5px;margin:0;}
+.loja-row .cnt{font-size:11px;color:var(--ink-soft);white-space:nowrap;flex:0 0 auto;}
+.loja-row .save-btn{
+  background:var(--sage-soft);color:var(--sage);border:none;border-radius:8px;
+  font-size:12px;font-weight:600;cursor:pointer;padding:8px 10px;flex:0 0 auto;
+}
+.loja-row .del-btn{margin-left:0;flex:0 0 auto;}
 .dia-row{
   display:flex;justify-content:space-between;align-items:center;
   padding:7px 4px;border-bottom:1px solid var(--line);font-size:12.5px;
@@ -463,6 +475,11 @@ nav.bottom button.active{color:var(--ink);background:var(--paper-2);}
     <section id="view-cartoes" class="hidden">
       <h2 class="section-title">Cartões e regras</h2>
       <div class="card-panel" id="listaCartoes"></div>
+      <h2 class="section-title">Gerenciar lojas</h2>
+      <div class="card-panel">
+        <p class="small-note" style="margin-top:0;">Corrija erros de digitação ou junte nomes duplicados. Para mesclar duas lojas, edite uma delas e digite exatamente o mesmo nome da outra — todos os lançamentos passam a usar o nome corrigido.</p>
+        <div id="listaLojas"></div>
+      </div>
       <h2 class="section-title">Nova regra / cartão</h2>
       <div class="card-panel">
         <label for="c-nome">Cartão</label>
@@ -922,6 +939,42 @@ function renderCartoes(){
   });
 }
 
+// ---------- GERENCIAR LOJAS ----------
+function renderLojasManage(){
+  const box = document.getElementById('listaLojas');
+  const lojas = uniqueLojas();
+  if(!lojas.length){ box.innerHTML = '<p class="empty">Nenhuma loja cadastrada ainda.</p>'; return; }
+  box.innerHTML = lojas.map(l=>{
+    const count = purchases.filter(p=>p.loja===l).length;
+    const safeId = 'loja_'+btoa(unescape(encodeURIComponent(l))).replace(/[^a-zA-Z0-9]/g,'');
+    return `<div class="loja-row" data-orig="${l.replace(/"/g,'&quot;')}">
+      <input type="text" value="${l.replace(/"/g,'&quot;')}" id="${safeId}">
+      <span class="cnt">${count}x</span>
+      <button class="save-btn" data-save="${l.replace(/"/g,'&quot;')}" data-input="${safeId}">Salvar</button>
+    </div>`;
+  }).join('');
+  box.querySelectorAll('[data-save]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const orig = btn.dataset.save;
+      const input = document.getElementById(btn.dataset.input);
+      const novo = input.value.trim();
+      if(!novo){ showToast('Digite um nome para a loja'); return; }
+      if(novo === orig){ showToast('Nada para alterar'); return; }
+      const mesclando = uniqueLojas().includes(novo);
+      const qtd = purchases.filter(p=>p.loja===orig).length;
+      const ok = confirm(mesclando
+        ? `Isso vai mesclar "${orig}" (${qtd} lançamento(s)) dentro de "${novo}". Continuar?`
+        : `Renomear "${orig}" para "${novo}" em ${qtd} lançamento(s)?`);
+      if(!ok) return;
+      purchases.forEach(p=>{ if(p.loja===orig) p.loja = novo; });
+      await saveAll();
+      populateCartaoSelect();
+      renderRecentes(); renderParcelas(); renderResumo(); renderLoja(); renderLojasManage();
+      showToast(mesclando ? 'Lojas mescladas' : 'Loja renomeada');
+    });
+  });
+}
+
 document.getElementById('btnSalvarRegra').addEventListener('click', async ()=>{
   const cartao = document.getElementById('c-nome').value.trim();
   const fech = parseInt(document.getElementById('c-fech').value);
@@ -1148,7 +1201,7 @@ function refreshView(view){
   if(view==='resumo'){ renderResumo(); }
   if(view==='saldo'){ renderSaldo(); }
   if(view==='loja'){ renderLoja(); }
-  if(view==='cartoes'){ renderCartoes(); }
+  if(view==='cartoes'){ renderCartoes(); renderLojasManage(); }
 }
 
 async function init(){
@@ -1164,6 +1217,7 @@ async function init(){
   renderSaldo();
   renderLoja();
   renderCartoes();
+  renderLojasManage();
   updatePreview();
   checkBackupReminder();
   document.getElementById('veil').style.display='none';
