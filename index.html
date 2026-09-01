@@ -703,12 +703,15 @@ function renderRecentes(){
     const parcelaInfo = inst.length===1
       ? `parcela única em ${fmtBR(inst[0].date)}`
       : `1ª em ${fmtBR(inst[0].date)} · última em ${fmtBR(inst[inst.length-1].date)}`;
+    
     const valorParcela = p.valorTotal / (p.parcelas || 1);
+    const textoParcelas = p.parcelas > 1 ? ` · ${p.parcelas}x de ${fmtBRL(valorParcela)}` : ` · 1x`;
+
     return `
     <div class="entry">
       <div>
         <div class="name">${p.loja}</div>
-        <div class="meta"><span class="tag ${tagClass(p.cartao)}">${p.cartao}</span>${fmtBR(parseISO(p.data))} · ${p.parcelas}x de ${fmtBRL(valorParcela)}</div>
+        <div class="meta"><span class="tag ${tagClass(p.cartao)}">${p.cartao}</span>${fmtBR(parseISO(p.data))}${textoParcelas}</div>
         <div class="meta">${parcelaInfo}</div>
         <button class="del-btn" data-del="${p.id}">excluir</button>
       </div>
