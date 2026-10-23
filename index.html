@@ -378,7 +378,11 @@ nav.bottom button.active{color:var(--ink);background:var(--paper-2);}
         <select id="p-ano"></select>
         <select id="p-mes"></select>
       </div>
-      <input id="p-busca" placeholder="Buscar por loja…" style="margin-bottom:14px;">
+      <input id="p-busca" placeholder="Buscar por loja…" style="margin-bottom:10px;">
+      <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:13px;margin:0 0 14px;">
+        <input type="checkbox" id="p-ocultar" checked style="width:auto;margin:0;">
+        Ocultar compras já finalizadas
+      </label>
       <div class="card-panel">
         <div class="total-line">
           <span class="lbl">Total no filtro</span>
@@ -813,6 +817,17 @@ function renderParcelas(){
   const mesSel = document.getElementById('p-mes').value;
   const busca = document.getElementById('p-busca').value.trim().toLowerCase();
   let inst = allInstallments();
+  if(document.getElementById('p-ocultar').checked){
+    // compra finalizada = a última parcela já venceu (até hoje); exceção: compras de 1x do mês corrente
+    const ultima = {};
+    inst.forEach(i=>{ if(!ultima[i.purchaseId] || i.date > ultima[i.purchaseId]) ultima[i.purchaseId] = i.date; });
+    const agora = new Date();
+    const fimHoje = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate(), 23, 59, 59);
+    inst = inst.filter(i=>{
+      if(ultima[i.purchaseId] > fimHoje) return true;
+      return i.total===1 && i.date.getFullYear()===agora.getFullYear() && i.date.getMonth()===agora.getMonth();
+    });
+  }
   if(anoSel) inst = inst.filter(i=>String(i.date.getFullYear())===anoSel);
   if(mesSel!=='') inst = inst.filter(i=>String(i.date.getMonth())===mesSel);
   if(busca) inst = inst.filter(i=>i.loja.toLowerCase().includes(busca));
@@ -845,6 +860,7 @@ function renderParcelas(){
 document.getElementById('p-ano').addEventListener('change', renderParcelas);
 document.getElementById('p-mes').addEventListener('change', renderParcelas);
 document.getElementById('p-busca').addEventListener('input', renderParcelas);
+document.getElementById('p-ocultar').addEventListener('change', renderParcelas);
 
 // ---------- RESUMO ----------
 function renderResumo(){
